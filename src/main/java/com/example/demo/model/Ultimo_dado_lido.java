@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "ultimo_dado_lido")
-public class ultimo_dado_lido implements Serializable {
+public class Ultimo_dado_lido implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long VEI_ID = 0L;
@@ -45,9 +45,7 @@ public class ultimo_dado_lido implements Serializable {
     public void setUDL_DH(String uDL_DH) {
         UDL_DH = uDL_DH;
     }
-    public Double getUDL_LAT() {
-        return UDL_LAT;
-    }
+    public Double getUDL_LAT() {return UDL_LAT;}
     public void setUDL_LAT(Double uDL_LAT) {
         UDL_LAT = uDL_LAT;
     }
