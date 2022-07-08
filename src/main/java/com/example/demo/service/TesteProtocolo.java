@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.daemon.BuscaComandos;
+import com.example.demo.model.Cmd_env;
 import com.example.demo.model.Ultimo_dado_lido;
+import com.example.demo.model.Veiculo;
 import com.example.demo.repository.Ult_dado_lidoRepository;
 
 import java.util.Optional;
 
 public class TesteProtocolo {
     Ultimo_dado_lido udl = new Ultimo_dado_lido();
+    Veiculo v = new Veiculo();
     Ult_dado_lidoRepository dao = new Ult_dado_lidoRepository() {
 
 
@@ -71,28 +75,32 @@ public class TesteProtocolo {
         }
     };
 
+
     Integer RPM = 0;
-    public Ultimo_dado_lido processaProtocol (String Input){
+    Long veiculoID;
+    Long veiculoSerial;
+
+    public Ultimo_dado_lido processaProtocol(String Input) {
+
 
         String status_report = "ST300STT"; //status report
 
 
-
-
-        if ((Input != null )&&(!Input.isEmpty())) {
+        if ((Input != null) && (!Input.isEmpty())) {
             String[] dados = Input.trim().split(";");
             switch (dados[0]) {
                 case "ST300STT":
                     System.out.println("Comando Status_report encontrado!");
-                    getVeiculoSerial(dados,1);
+
+                    getVeiculoSerial(dados, 1);
+                    getLatitude(dados, 7);
+
                     break;
+
                 default:
                     System.out.println("Protocolo não identificado");
                     break;
             }
-
-            getLatitude(dados,7);
-
 
 
         }
@@ -101,21 +109,24 @@ public class TesteProtocolo {
     }
     //funções para coletar e tratar os dados em cada pososição
 
-    public void getVeiculoSerial(String[] dados, int campo){
-        Long serial = (Long.parseLong(dados[campo]));
-        udl.setUDL_MOD(serial);
+    public void getVeiculoSerial(String[] dados, int campo) {
+
+        this.veiculoSerial = (Long.parseLong(dados[campo]));
+        udl.setUDL_MOD(veiculoSerial);
+
+
     }
 
-    public void getRPM(String []dados, int campo){
-        if (campo >= dados.length || dados[campo] == null || dados[campo].isEmpty()){
+    public void getRPM(String[] dados, int campo) {
+        if (campo >= dados.length || dados[campo] == null || dados[campo].isEmpty()) {
             RPM = 0;
-        }else{
+        } else {
             RPM = Integer.parseInt(dados[campo]);
             udl.setUDL_RPM(RPM);
         }
     }
 
-    public void getLatitude(String[]dados, int campo) {
+    public void getLatitude(String[] dados, int campo) {
         if (dados[campo] == null || dados[campo].isEmpty()) {
             udl.setUDL_LAT(0D);
 
@@ -129,6 +140,21 @@ public class TesteProtocolo {
 
     }
 
-    //outro método
+    public String comandos() {
+    String comandoTexto = "";
+
+        if (veiculoID == 0){
+            if (veiculoSerial == 0){
+                return "";
+            }
+            for (Cmd_env cmd : BuscaComandos.lista_comandos) {
+
+            }
+        }
+
+
+    return comandoTexto;
+    }
+
 
 }
