@@ -71,9 +71,12 @@ public class TesteProtocolo {
         }
     };
 
+    Integer RPM = 0;
     public Ultimo_dado_lido processaProtocol (String Input){
 
         String status_report = "ST300STT"; //status report
+
+
 
 
         if ((Input != null )&&(!Input.isEmpty())) {
@@ -88,6 +91,10 @@ public class TesteProtocolo {
                     break;
             }
 
+            getLatitude(dados,7);
+
+
+
         }
 
         return udl;
@@ -98,4 +105,30 @@ public class TesteProtocolo {
         Long serial = (Long.parseLong(dados[campo]));
         udl.setUDL_MOD(serial);
     }
+
+    public void getRPM(String []dados, int campo){
+        if (campo >= dados.length || dados[campo] == null || dados[campo].isEmpty()){
+            RPM = 0;
+        }else{
+            RPM = Integer.parseInt(dados[campo]);
+            udl.setUDL_RPM(RPM);
+        }
+    }
+
+    public void getLatitude(String[]dados, int campo) {
+        if (dados[campo] == null || dados[campo].isEmpty()) {
+            udl.setUDL_LAT(0D);
+
+        } else {
+            Float lat = new Float(dados[campo]);
+            if (lat < -90 || lat > 90) {
+                udl.setUDL_LAT(0D);
+            }
+            udl.setUDL_LAT(Double.parseDouble(dados[campo]));
+        }
+
+    }
+
+    //outro método
+
 }
